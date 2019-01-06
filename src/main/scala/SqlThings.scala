@@ -4,7 +4,7 @@ import org.apache.spark.sql.functions._
 
 object SqlThings {
   def main(args: Array[String]): Unit = {
-    val spark = new SparkSession()
+    val spark = SparkSession.builder().appName("WordCnt").enableHiveSupport().getOrCreate()
     case class Order(order_id:Int,order_date:Long,order_customer_id:Int,order_status:String)
     val orders = spark.read.parquet("orders_parquet_uncompress").as[Order]
     val order_map = orders.map(dt=>(dt.order_status,1)).toDF(Seq("status","val1"):_*)
